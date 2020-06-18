@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project("ProjectName"
+project("Elements of Programming"
         VERSION 0.0
         LANGUAGES CXX)
 
