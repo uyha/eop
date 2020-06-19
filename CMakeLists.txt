@@ -3,5 +3,10 @@ project("Elements of Programming"
         VERSION 0.0
         LANGUAGES CXX)
 
-add_executable(main "main.cpp")
-target_compile_features(main PRIVATE cxx_std_20)
+SET(CMAKE_CXX_STANDARD 20)
+
+include(CTest)
+
+add_subdirectory(external)
+add_subdirectory(src)
+
