@@ -5,21 +5,27 @@
 #define CATCH_CONFIG_MAIN
 #include "concepts.hpp"
 
-#include <catch/catch.hpp>
+#include <catch/h.hpp>
+#include <river/type_list.hpp>
 
 using namespace eop;
 
-TEMPLATE_TEST_CASE("Concepts for built-in types",
-                   "[concepts][built-in]",
-                   bool,
-                   char,
-                   signed char,
-                   unsigned short int,
-                   unsigned int,
-                   unsigned long,
-                   signed short int,
-                   signed int,
-                   signed long) {
+using built_in_types = river::type_list<bool,
+                                        char,
+                                        unsigned char,
+                                        unsigned short,
+                                        unsigned int,
+                                        unsigned long,
+                                        unsigned long long,
+                                        signed char,
+                                        signed short,
+                                        signed int,
+                                        signed long,
+                                        signed long long,
+                                        float,
+                                        double>;
+
+TEMPLATE_LIST_TEST_CASE("Concepts for built-in types", "[concepts][built-in]", built_in_types) {
   CHECK(equality_comparable<TestType>);
   CHECK(assignable<TestType>);
   CHECK(destructible<TestType>);
