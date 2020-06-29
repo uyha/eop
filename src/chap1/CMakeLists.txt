@@ -1,4 +1,4 @@
-add_executable(chap1_test tests.cpp)
-target_link_libraries(chap1_test PRIVATE catch)
+add_executable(chap1 tests.cpp)
+target_link_libraries(chap1 PRIVATE catch eop::utils)
 
-add_test(chap1_test chap1_test)
+add_test(chap1 chap1)

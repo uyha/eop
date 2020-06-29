@@ -3,19 +3,16 @@
 //
 
 #pragma once
-#include <concepts>
-#include <type_traits>
+#include "utils.hpp"
 
+#include <utility>
 namespace eop {
 template <typename T>
-concept boolean = std::is_convertible_v<std::remove_cvref_t<T>, bool>;
-
-template <typename T>
 concept equality_comparable = requires(T lhs, T rhs) {
-  { lhs == rhs }
-  ->boolean;
-  { lhs != rhs }
-  ->boolean;
+  // clang-format off
+  { lhs == rhs } -> boolean;
+  { lhs != rhs } -> boolean;
+  // clang-format on
 };
 
 template <typename T>
@@ -40,20 +37,24 @@ concept copy_constructible = requires(T const &source) {
 
 template <typename T>
 concept total_ordered = equality_comparable<T> &&requires(T lhs, T rhs) {
-  { lhs < rhs }
-  ->boolean;
-  { lhs > rhs }
-  ->boolean;
-  { lhs <= rhs }
-  ->boolean;
-  { lhs >= rhs }
-  ->boolean;
+  // clang-format off
+  { lhs < rhs } -> boolean;
+  { lhs > rhs } -> boolean;
+  { lhs <= rhs } -> boolean;
+  { lhs >= rhs } -> boolean;
+  // clang-format on
 };
 
 template <typename T>
 concept regular = equality_comparable<T> &&assignable<T> &&destructible<T>
     &&default_constructible<T> &&copy_constructible<T> &&total_ordered<T>;
 
-template <typename Procedure>
-concept regular_procedure = true;
+template <typename Procedure, typename... Args>
+concept regular_procedure = requires(Procedure procedure, Args &&... args) {
+  // Since there's no way to determine if a procedure is regular or not, every procedure is
+  {procedure(std::forward<Args>(args)...)};
+};
+
+template <typename Procedure, typename... Args>
+concept functional_procedure = regular_procedure<Procedure, Args...> && (!pointer<Args> && ...);
 } // namespace eop
